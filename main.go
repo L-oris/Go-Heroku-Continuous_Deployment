@@ -30,7 +30,7 @@ func determineEnvPort() string {
 	port := os.Getenv("PORT")
 	if port == "" {
 		log.Println("PORT not found in env variable, using default setting to :80")
-		port = ":8080"
+		port = ":80"
 	}
 
 	return port
