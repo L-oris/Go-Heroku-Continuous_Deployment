@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/L-oris/herokuDeploy/reverse"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -25,7 +26,8 @@ func (c *Controller) AddToMessage(w http.ResponseWriter, r *http.Request, _ http
 		return
 	}
 
-	c.message = c.message + " | " + string(bs)
+	reversedMessage := reverse.Reverse(string(bs))
+	c.message = c.message + " | " + reversedMessage
 	io.WriteString(w, c.message)
 }
 

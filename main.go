@@ -10,6 +10,8 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+const defaultPort = "8080"
+
 func main() {
 	router := httprouter.New()
 	controller := controller.NewController()
@@ -19,7 +21,6 @@ func main() {
 	router.DELETE("/", controller.ResetMessage)
 
 	port := determineEnvPort()
-	log.Println("listen on port", port)
 	if err := http.ListenAndServe(port, router); err != nil {
 		fmt.Println("error listening to port", port, ":", err)
 		return
@@ -28,12 +29,13 @@ func main() {
 
 func determineEnvPort() string {
 	port := os.Getenv("PORT")
-	log.Println("PORT received from env variables: ", port)
+	log.Println("'PORT' received from env variables: ", port)
 
 	if port == "" {
-		log.Println("error PORT not found in env variable, using default setting to :8080")
-		port = "8080"
+		log.Println("error 'PORT' not found in env variables, using default ", defaultPort)
+		port = defaultPort
 	}
 
+	log.Println("listen on port:", port)
 	return ":" + port
 }
