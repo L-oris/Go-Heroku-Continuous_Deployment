@@ -54,7 +54,7 @@ jobs:
                       mkdir -p ~/.ssh/
                       echo "heroku.com ssh-rsa ${HEROKU_SSH}/" >> ~/.ssh/known_hosts
                       echo "StrictHostKeyChecking no" >> ~/.ssh/config
-                      git push "https://git.heroku.com/${HEROKU_APP_NAME}.git" master
+                      git push "git@heroku.com:${HEROKU_APP_NAME}.git" master
 
 workflows:
     version: 2
