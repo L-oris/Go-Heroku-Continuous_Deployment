@@ -12,6 +12,10 @@ jobs:
                   command: |
                       dep ensure
                       go build -v
+            - persist_to_workspace:
+                  root: ./
+                  paths:
+                      - ./
 
     test:
         working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
