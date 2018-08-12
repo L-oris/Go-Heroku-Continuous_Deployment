@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/L-oris/herokuDeploy/reverse"
+	"github.com/L-oris/go-heroku-continuous_deployment/reverse"
 	"github.com/julienschmidt/httprouter"
 )
 

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/L-oris/herokuDeploy/controller"
+	"github.com/L-oris/go-heroku-continuous_deployment/controller"
 	"github.com/julienschmidt/httprouter"
 )
 

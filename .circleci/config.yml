@@ -1,11 +1,10 @@
 version: 2
 jobs:
     build:
-        working_directory: /go/src/github.com/L-oris/herokuDeploy
+        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
         docker:
             - image: circleci/golang:1.10.3
         steps:
-            # - run: git config --global url.ssh://git@github.com/your_company.insteadOf https://github.com/your_company
             - checkout
             - run: go get -u github.com/golang/dep/cmd/dep
             - run:
@@ -13,9 +12,69 @@ jobs:
                   command: |
                       dep ensure
                       go build -v
+
+    test:
+        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        docker:
+            - image: circleci/golang:1.10.3
+        steps:
+            - checkout
+            # remove from here
+            - run: go get -u github.com/golang/dep/cmd/dep
+            - run:
+                  name: Build
+                  command: |
+                      dep ensure
+                      go build -v
+            # remove to here
             - run:
                   name: Test
                   command: |
                       go fmt ./...
                       go vet ./...
                       go test -v ./...
+
+    deploy:
+        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        docker:
+            - image: circleci/golang:1.10.3
+        steps:
+            - checkout
+              # remove from here
+            - run: go get -u github.com/golang/dep/cmd/dep
+            - run:
+                  name: Build
+                  command: |
+                      dep ensure
+                      go build -v
+            # remove to here
+            - run:
+                  name: Deploy to Heroku
+                  command: |
+                      mkdir -p ~/.ssh/
+                      echo "heroku.com ssh-rsa ${HEROKU_SSH}/" >> ~/.ssh/known_hosts
+                      echo "StrictHostKeyChecking no" >> ~/.ssh/config
+                      git push "https://git.heroku.com/${HEROKU_APP_NAME}.git" master
+
+workflows:
+    version: 2
+    build-deploy:
+        jobs:
+            - build
+            - test:
+                  requires:
+                      - build
+            - hold:
+                  type: approval
+                  requires:
+                      - test
+                  filters:
+                      branches:
+                          only:
+                              - master
+            - deploy:
+                  requires:
+                      - hold
+                  filters:
+                      branches:
+                          only: master
