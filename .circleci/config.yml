@@ -12,12 +12,26 @@ jobs:
                   command: |
                       dep ensure
                       go build -v
+
+    test:
+        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        docker:
+            - image: circleci/golang:1.10.3
+        steps:
+            - checkout
             - run:
                   name: Test
                   command: |
                       go fmt ./...
                       go vet ./...
                       go test -v ./...
+
+    deploy:
+        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        docker:
+            - image: circleci/golang:1.10.3
+        steps:
+            - checkout
             - run:
                   name: Deploy to Heroku
                   command: |
