@@ -1,11 +1,10 @@
 version: 2
 jobs:
     build:
-        working_directory: /go/src/github.com/L-oris/herokuDeploy
+        working_directory: /go/src/github.com/L-oris/Go-Heroku-Continuous_Deployment
         docker:
             - image: circleci/golang:1.10.3
         steps:
-            # - run: git config --global url.ssh://git@github.com/your_company.insteadOf https://github.com/your_company
             - checkout
             - run: go get -u github.com/golang/dep/cmd/dep
             - run:
@@ -19,3 +18,33 @@ jobs:
                       go fmt ./...
                       go vet ./...
                       go test -v ./...
+            - run:
+                  name: Deploy to Heroku
+                  command: |
+                      mkdir -p ~/.ssh/
+                      echo "heroku.com ssh-rsa ${HEROKU-SSH}/" >> ~/.ssh/known_hosts
+                      echo "StrictHostKeyChecking no" >> ~/.ssh/config
+                      git push "https://git.heroku.com/${HEROKU-APP_NAME}.git" master
+
+workflows:
+    version: 2
+    build-deploy:
+        jobs:
+            - build
+            - test:
+                  requires:
+                      - build
+            - hold:
+                  type: approval
+                  requires:
+                      - test
+                  filters:
+                      branches:
+                          only:
+                              - master
+            - deploy:
+                  requires:
+                      - hold
+                  filters:
+                      branches:
+                          only: master
