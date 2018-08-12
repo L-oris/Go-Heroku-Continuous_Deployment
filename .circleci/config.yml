@@ -63,6 +63,9 @@ jobs:
                       mkdir -p ~/.ssh/
                       echo "heroku.com ssh-rsa ${HEROKU_SSH}" >> ~/.ssh/known_hosts
                       echo "StrictHostKeyChecking no" >> ~/.ssh/config
+                      echo "BEFORE KEYS"
+                      heroku keys
+                      echo "AFTER KEYS"
                       git push "git@heroku.com:${HEROKU_APP_NAME}.git" master
 
 workflows:
