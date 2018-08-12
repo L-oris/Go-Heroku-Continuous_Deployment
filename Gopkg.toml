@@ -1,5 +1,5 @@
 [metadata.heroku]
-  root-package = "github.com/L-oris/Go-Heroku-Continuous_Deployment"
+  root-package = "github.com/L-oris/go-heroku-continuous_deployment"
   go-version = "go1.10.3"
   install = ["."]
 
