@@ -1,12 +1,9 @@
-defaults: &defaults
-    working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
-    docker:
-        - image: circleci/golang:1.10.3
-
 version: 2
 jobs:
     build:
-        <<: *defaults
+        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        docker:
+            - image: circleci/golang:1.10.3
         steps:
             - checkout
             - run: go get -u github.com/golang/dep/cmd/dep
@@ -15,20 +12,13 @@ jobs:
                   command: |
                       dep ensure
                       go build -v
-            - persist_to_workspace:
-                  # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is
-                  # taken to be the root directory of the workspace.
-                  root: ./
-                  # Must be relative path from root
-                  paths:
-                      - vendor
 
     test:
-        <<: *defaults
+        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        docker:
+            - image: circleci/golang:1.10.3
         steps:
-            - attach_workspace:
-                  # Must be absolute path or relative path from working_directory
-                  at: ./vendor
+            - checkout
             # remove from here
             - run: go get -u github.com/golang/dep/cmd/dep
             - run:
@@ -51,6 +41,9 @@ jobs:
                       mkdir -p ~/.ssh/
                       echo "heroku.com ssh-rsa ${HEROKU_SSH}" >> ~/.ssh/known_hosts
                       echo "StrictHostKeyChecking no" >> ~/.ssh/config
+                      echo "BEFORE KEYS"
+                      heroku keys
+                      echo "AFTER KEYS"
                       git push "git@heroku.com:${HEROKU_APP_NAME}.git" master
 
     deploy:
