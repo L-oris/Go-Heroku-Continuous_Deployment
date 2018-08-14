@@ -29,6 +29,7 @@ jobs:
                   name: Deploy to Heroku
                   command: |
                       mkdir -p ~/.ssh/
+                      ls ~/.ssh
                       echo "heroku.com ssh-rsa ${HEROKU_SSH}" >> ~/.ssh/known_hosts
                       cat ~/.ssh/known_hosts
                       echo "StrictHostKeyChecking no" >> ~/.ssh/config
