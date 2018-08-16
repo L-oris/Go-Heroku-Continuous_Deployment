@@ -1,4 +1,4 @@
-#### Deploy to Heroku CircleCI step
+### Deploy to Heroku CircleCI step
 
 To make it working
 
@@ -6,4 +6,13 @@ To make it working
 -   register the public key to your Heroku account
 -   add the private key to CircleCI, to allow it publishing
 
-##### Useful guide: https://devcenter.heroku.com/articles/keys
+#### Useful guides:
+
+-   https://devcenter.heroku.com/articles/keys
+-   https://circleci.com/docs/2.0/add-ssh-key/
+
+## todo
+
+-   cache previous build
+-   remove '-f' force flag from heroku push
+-   split 'fmt', 'vet' and 'test' into separate steps
