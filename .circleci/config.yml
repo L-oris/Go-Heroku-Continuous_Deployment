@@ -51,8 +51,7 @@ jobs:
             - run:
                   name: Deploy to Heroku
                   command: |
-                      mkdir -p ~/.ssh/
-                      echo "heroku.com ssh-rsa ${HEROKU_SSH}" >> ~/.ssh/known_hosts
+                      # disable warning: "The authenticity of host 'heroku.com (50.19.xx.xxx)' can't be established"
                       echo "StrictHostKeyChecking no" >> ~/.ssh/config
                       git push "git@heroku.com:${HEROKU_APP_NAME}.git" master
 
