@@ -33,7 +33,7 @@ jobs:
                       #   echo "heroku.com ssh-rsa ${HEROKU_SSH}" >> ~/.ssh/known_hosts
                       #   cat ~/.ssh/known_hosts
                       #   echo "StrictHostKeyChecking no" >> ~/.ssh/config
-                        git push "git@heroku.com:${HEROKU_APP_NAME}.git" herokuDeploy#1:master
+                        git push "git@heroku.com:${HEROKU_APP_NAME}.git" herokuDeploy#1:master -y
 
 workflows:
     version: 2
