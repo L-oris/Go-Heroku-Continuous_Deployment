@@ -17,7 +17,9 @@ save_cache: &save_cache
 
 jobs:
     build:
-        <<: *docker_defaults
+        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        docker:
+            - image: circleci/golang:1.10.3
         steps:
             - checkout
             - *restore_cache
@@ -30,7 +32,9 @@ jobs:
             - *save_cache
 
     test:
-        <<: *docker_defaults
+        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        docker:
+            - image: circleci/golang:1.10.3
         steps:
             - checkout
             - *restore_cache
@@ -42,7 +46,9 @@ jobs:
                       go test -v ./...
 
     deploy:
-        <<: *docker_defaults
+        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        docker:
+            - image: circleci/golang:1.10.3
         steps:
             - checkout
             - run:
