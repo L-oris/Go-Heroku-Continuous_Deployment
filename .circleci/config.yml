@@ -6,14 +6,18 @@ docker_defaults: &docker_defaults
         - image: circleci/golang:1.10.3
 
 restore_cache: &restore_cache
-    keys:
-        - deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+    restore_cache:
+        name: 'Restoring Cache'
+        keys:
+            - deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
 
 save_cache: &save_cache
-    key: deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
-    paths:
-        - /go/pkg/dep/
-        - /go/src/github.com/L-oris/go-heroku-continuous_deployment/vendor/
+    save_cache:
+        name: 'Saving Cache'
+        key: deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+        paths:
+            - /go/pkg/dep/
+            - /go/src/github.com/L-oris/go-heroku-continuous_deployment/vendor/
 
 jobs:
     build:
