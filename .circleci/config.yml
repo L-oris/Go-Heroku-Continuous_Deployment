@@ -8,11 +8,11 @@ docker_defaults: &docker_defaults
 restore_cache: &restore_cache
     restore_cache:
         keys:
-            - deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+            - deps-{{ .Environment.CACHE_VERSION }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
 
 save_cache: &save_cache
     save_cache:
-        key: deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+        key: deps-{{ .Environment.CACHE_VERSION }}-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
         paths:
             - /go/pkg/dep/
             - /go/src/github.com/L-oris/go-heroku-continuous_deployment/vendor/
