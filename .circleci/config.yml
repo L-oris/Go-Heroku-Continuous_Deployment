@@ -23,7 +23,7 @@ jobs:
                       - /go/src/github.com/L-oris/go-heroku-continuous_deployment/vendor/
 
     test:
-        # working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
         docker:
             - image: circleci/golang:1.10.3
         steps:
@@ -38,7 +38,7 @@ jobs:
                       go test -v ./...
 
     deploy:
-        # working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
         docker:
             - image: circleci/golang:1.10.3
         steps:
