@@ -20,9 +20,9 @@ jobs:
                       - vendor/
 
     test:
-        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
-        docker:
-            - image: circleci/golang:1.10.3
+        # working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        # docker:
+        #     - image: circleci/golang:1.10.3
         steps:
             - restore_cache:
                   keys:
@@ -35,9 +35,9 @@ jobs:
                       go test -v ./...
 
     deploy:
-        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
-        docker:
-            - image: circleci/golang:1.10.3
+        # working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        # docker:
+        #     - image: circleci/golang:1.10.3
         steps:
             - checkout
               # remove from here
