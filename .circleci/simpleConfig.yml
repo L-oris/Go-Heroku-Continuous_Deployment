@@ -1,0 +1,76 @@
+# this is the simplified version of 'config.yml' currently used
+
+version: 2
+jobs:
+    build:
+        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        docker:
+            - image: circleci/golang:1.10.3
+        steps:
+            - checkout
+            - restore_cache:
+                  keys:
+                      - deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+            - run: go get -u github.com/golang/dep/cmd/dep
+            - run:
+                  name: Build
+                  command: |
+                      dep ensure
+                      go build -v
+            - save_cache:
+                  key: deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+                  paths:
+                      - /go/pkg/dep/
+                      - /go/src/github.com/L-oris/go-heroku-continuous_deployment/vendor/
+
+    test:
+        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        docker:
+            - image: circleci/golang:1.10.3
+        steps:
+            - checkout
+            - restore_cache:
+                  keys:
+                      - deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+            - run:
+                  name: Test
+                  command: |
+                      go fmt ./...
+                      go vet ./...
+                      go test -v ./...
+
+    deploy:
+        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+        docker:
+            - image: circleci/golang:1.10.3
+        steps:
+            - checkout
+            - run:
+                  name: Deploy to Heroku
+                  command: |
+                      # disable warning: "The authenticity of host 'heroku.com (50.19.xx.xxx)' can't be established"
+                      echo "StrictHostKeyChecking no" >> ~/.ssh/config
+                      git push "git@heroku.com:${HEROKU_APP_NAME}.git" master -f
+
+workflows:
+    version: 2
+    build-deploy:
+        jobs:
+            - build
+            - test:
+                  requires:
+                      - build
+            - hold:
+                  type: approval
+                  requires:
+                      - test
+                  filters:
+                      branches:
+                          only:
+                              - master
+            - deploy:
+                  requires:
+                      - hold
+                  filters:
+                      branches:
+                          only: master
