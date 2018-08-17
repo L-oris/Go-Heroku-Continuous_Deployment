@@ -6,6 +6,9 @@ jobs:
             - image: circleci/golang:1.10.3
         steps:
             - checkout
+            - restore_cache:
+                  keys:
+                      - deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
             - run: go get -u github.com/golang/dep/cmd/dep
             - run:
                   name: Build
@@ -13,16 +16,16 @@ jobs:
                       dep ensure
                       go build -v
             - save_cache:
-                  name: Save dep and vendor
+                  #   name: Save dep and vendor
                   key: deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
                   paths:
                       - /go/pkg/dep/
-                      - vendor/
+                      - /go/src/github.com/L-oris/go-heroku-continuous_deployment/vendor/
 
     test:
         # working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
-        # docker:
-        #     - image: circleci/golang:1.10.3
+        docker:
+            - image: circleci/golang:1.10.3
         steps:
             - restore_cache:
                   keys:
@@ -36,8 +39,8 @@ jobs:
 
     deploy:
         # working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
-        # docker:
-        #     - image: circleci/golang:1.10.3
+        docker:
+            - image: circleci/golang:1.10.3
         steps:
             - checkout
               # remove from here
