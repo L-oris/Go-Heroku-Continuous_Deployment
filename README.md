@@ -14,6 +14,5 @@ To make it working
 
 ## todo
 
--   cache previous build
 -   split 'fmt', 'vet' and 'test' into separate steps
--   remove '-f' force flag from heroku push
+-   add env variable for storing cache version
