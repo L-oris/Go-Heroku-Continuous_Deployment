@@ -1,35 +1,39 @@
 version: 2
+
+docker_defaults: &docker_defaults
+    working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
+    docker:
+        - image: circleci/golang:1.10.3
+
+restore_cache: &restore_cache
+    keys:
+        - deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+
+save_cache: &save_cache
+    key: deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+    paths:
+        - /go/pkg/dep/
+        - /go/src/github.com/L-oris/go-heroku-continuous_deployment/vendor/
+
 jobs:
     build:
-        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
-        docker:
-            - image: circleci/golang:1.10.3
+        - *docker_defaults
         steps:
             - checkout
-            - restore_cache:
-                  keys:
-                      - deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+            - *restore_cache
             - run: go get -u github.com/golang/dep/cmd/dep
             - run:
                   name: Build
                   command: |
                       dep ensure
                       go build -v
-            - save_cache:
-                  key: deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
-                  paths:
-                      - /go/pkg/dep/
-                      - /go/src/github.com/L-oris/go-heroku-continuous_deployment/vendor/
+            - *save_cache
 
     test:
-        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
-        docker:
-            - image: circleci/golang:1.10.3
+        - *docker_defaults
         steps:
             - checkout
-            - restore_cache:
-                  keys:
-                      - deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+            - *restore_cache
             - run:
                   name: Test
                   command: |
@@ -38,9 +42,7 @@ jobs:
                       go test -v ./...
 
     deploy:
-        working_directory: /go/src/github.com/L-oris/go-heroku-continuous_deployment
-        docker:
-            - image: circleci/golang:1.10.3
+        - *docker_defaults
         steps:
             - checkout
             - run:
