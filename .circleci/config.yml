@@ -8,7 +8,7 @@ jobs:
             - checkout
             - restore_cache:
                   keys:
-                      - deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+                      - deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.toml" }}
             - run: go get -u github.com/golang/dep/cmd/dep
             - run:
                   name: Build
@@ -17,7 +17,7 @@ jobs:
                       go build -v
             - save_cache:
                   #   name: Save dep and vendor
-                  key: deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+                  key: deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.toml" }}
                   paths:
                       - /go/pkg/dep/
                       - /go/src/github.com/L-oris/go-heroku-continuous_deployment/vendor/
@@ -29,7 +29,7 @@ jobs:
         steps:
             - restore_cache:
                   keys:
-                      - deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.lock" }}
+                      - deps-{{ arch }}-{{ .Branch }}-{{ checksum "Gopkg.toml" }}
             - run:
                   name: Test
                   command: |
