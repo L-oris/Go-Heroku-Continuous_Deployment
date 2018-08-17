@@ -12,7 +12,6 @@ To make it working
 -   https://circleci.com/docs/2.0/add-ssh-key/
 -   https://www.ssh.com/ssh/public-key-authentication
 
-## todo
+### CircleCI Steps
 
--   split 'fmt', 'vet' and 'test' into separate steps
--   add env variable for storing cache version
+![](./screenShot.png)
