@@ -11,8 +11,3 @@ To make it working
 -   https://devcenter.heroku.com/articles/keys
 -   https://circleci.com/docs/2.0/add-ssh-key/
 -   https://www.ssh.com/ssh/public-key-authentication
-
-## todo
-
--   split 'fmt', 'vet' and 'test' into separate steps
--   add env variable for storing cache version
