@@ -15,7 +15,7 @@ func TestReverseToReturnString(t *testing.T) {
 
 func TestReverseToReturnReversedInputString(t *testing.T) {
 	result := Reverse("hello")
-	expectedResult := "ollh"
+	expectedResult := "olleh"
 
 	if result != expectedResult {
 		t.Fatalf("Expected %s, got %s", result, expectedResult)
