@@ -25,12 +25,22 @@ run_build: &run_build
               dep ensure
               go build -v
 
+run_fmt: &run_fmt
+    run:
+          name: Fmt
+          command: |
+              go fmt ./...
+
+run_vet: &run_vet
+    run:
+          name: Vet
+          command: |
+              go vet ./...
+
 run_test: &run_test
     run:
           name: Test
           command: |
-              go fmt ./...
-              go vet ./...
               go test -v ./...
 
 run_deploy: &run_deploy
@@ -50,6 +60,20 @@ jobs:
             - *run_build
             - *save_cache
 
+    fmt:
+        <<: *docker_defaults
+        steps:
+            - checkout
+            - *restore_cache
+            - *run_fmt
+    
+    vet:
+        <<: *docker_defaults
+        steps:
+            - checkout
+            - *restore_cache
+            - *run_vet
+
     test:
         <<: *docker_defaults
         steps:
@@ -68,12 +92,20 @@ workflows:
     build-deploy:
         jobs:
             - build
+            - fmt:
+                  requires:
+                      - build
+            - vet:
+                  requires:
+                      - build
             - test:
                   requires:
                       - build
             - hold:
                   type: approval
                   requires:
+                      - fmt
+                      - vet
                       - test
                   filters:
                       branches:
