@@ -1,7 +1,7 @@
-# [metadata.heroku]
-#   root-package = "github.com/L-oris/go-heroku-continuous_deployment"
-#   go-version = "go1.10.3"
-#   install = ["."]
+[metadata.heroku]
+  root-package = "github.com/L-oris/go-heroku-continuous_deployment"
+  go-version = "go1.10.3"
+  install = ["."]
 
 [[constraint]]
   name = "github.com/julienschmidt/httprouter"
