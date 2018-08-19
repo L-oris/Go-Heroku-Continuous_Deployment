@@ -25,23 +25,6 @@ func main() {
 		fmt.Println("error listening to port", port, ":", err)
 		return
 	}
-
-	c := make(chan string)
-	links := []string{
-		"https://stackoverflow.com",
-	}
-
-	fmt.Println("checking links..")
-	for _, link := range links {
-		go checkLink(link, c)
-	}
-
-	for link := range c {
-		fmt.Println("ADDRESS MAIN", &link)
-		go func() {
-			checkLink(link, c)
-		}()
-	}
 }
 
 func determineEnvPort() string {
@@ -55,17 +38,4 @@ func determineEnvPort() string {
 
 	log.Println("listen on port:", port)
 	return ":" + port
-}
-
-func checkLink(link string, c chan string) {
-	fmt.Println("ADDRESS CHECKLINK", &link)
-	_, err := http.Get(link)
-	if err != nil {
-		// fmt.Println(link + " may be down")
-		c <- link
-		return
-	}
-
-	// fmt.Println(link + " is up!")
-	c <- link
 }
